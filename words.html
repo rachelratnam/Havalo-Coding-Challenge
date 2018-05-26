@@ -1,0 +1,163 @@
+<!doctype html>
+<html>
+<head>
+    <title>Words</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    <style>
+        body {
+            background-color: lightblue;
+        }
+    #headercontainer {
+        height : 600px;
+        overflow: hidden;
+    }
+    #bgimage {
+        display: block;
+        margin: auto;
+        width: 100%;
+        position: relative;
+    }
+    h1 {
+        color: white;
+        font-family: Verdana;
+        font-size: 100px;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    #headertext {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        top: 200px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    h2 {
+        color: white;
+        font-family: Verdana
+        font-size: 50px;
+        font-weight: 400;
+    }
+    #headertwotext {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        top: 25px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    #maincontent {
+        overflow: hidden;
+        width: 1500px;
+        font-family: Verdana;
+        color: blue;
+    }
+    .column {
+        float: left;
+        margin: 30px;
+    }
+
+    #instructions {
+        font-size: 30px;
+        display: none;
+    }
+    a {
+        color: blue;
+    }
+    .link:hover {
+        color: black;
+    }
+    li {
+        font-size: 20px;
+        position: relative;
+        top: -100px;
+    }
+    ul {
+        overflow: hidden;
+    }
+    form {
+        display: none;
+    }
+    #textinput {
+        height: 20px;
+        width: 420px;
+        margin-top: 20px;
+        resize: none;
+        font-size: 15px;
+    }
+    #lookupbutton {
+        width: 120px;
+        font-size: 20px;
+    }
+    #wordrepeat {
+        font-size: 30px;
+        font-style: italic;
+    }
+    #revspelling {
+        font-style: italic;
+    }
+    </style>
+</head>
+<body>
+    <!-- HTML goes here to accept input word and display results from the 3 AJAX calls to http://localhost:4444 -->
+    <div id="headercontainer">
+        <div id="imagecontainer">
+            <img src="https://thumbs.gfycat.com/PoliticalEarnestChevrotain-max-1mb.gif" alt="Havalo Background" id="bgimage"/>
+        </div>
+        <div id="headertext">
+            <h1>Havalo</h1>
+            <h2> By: Rachel Ratnam </h2>
+        </div>
+    </div>
+    
+    <div id="maincontent">
+        <div class="column" id="leftcol">
+            
+            <p id="instructions">Input a word: Palindrome? Duplicate Letters? See It Reversed! </p>
+            <form>
+                <textarea id="textinput" placeholder="Enter word"></textarea>
+                <input type="button" value="Submit" id="lookupbutton"/>
+            </form>
+            
+        </div>
+        <div>
+            <ul>
+                <li class="results" id="presults"></li>
+                <li class="results" id="dresults"></li>
+                <li class="results" id="rresults"></li>
+            </ul>
+        </div>
+</body>
+<script>
+    $("#instructions").show(2000);
+    $("form").delay(1500).show(1500);
+    
+    var word = $("#textinput").val();
+        $(document).ready(function(){
+            $("button").click(function(){
+                              $.get("http://localhost:4444/palindrome?word=" + $("#textinput").val(), function(data){
+                                    if(data == "yes"){
+                                    $("#presults").html("The word is a palindrome");
+                                    }
+                                    if(data == "no"){
+                                    $("#presults").html("The word is not a palindrome");
+                                    }
+                                    
+                                    });
+                              $.get("http://localhost:4444/duplicates?word=" + $("#textinput").val(), function(data){
+                                    if(data == "yes"){
+                                    $("#dresults").html("The word contains duplicates");
+                                    }
+                                    if(data == "no"){
+                                    $("#dresults").html("The word contains no duplicates");
+                                    }
+                                    });
+                              $.get("http://localhost:4444/reverse?word=" + $("#textinput").val(), function(data){
+                                    $("#rresults").html("The word reversed is " + data);
+                                    });
+                              });
+                          });
+    
+    </script>
+</html>
